@@ -7,7 +7,7 @@ from .extensions import db
 from .models import Product
 
 product_bp = Blueprint("products", __name__)
-
+health_bp = Blueprint("health", __name__)
 
 class ProductData(TypedDict):
     name: str
@@ -68,3 +68,7 @@ def delete_product(product_id: int):
         db.session.commit()
 
     return jsonify({"message": "Product was deleted permanently from DB."}), 200
+
+@health_bp.get("/health")
+def health():
+    return jsonify({"status": "ok"}), 200

@@ -15,6 +15,19 @@
     },
   });
 
+  async function checkHealth() {
+  try {
+    const response = await fetch("http://localhost:8080/api/v1/health");
+    const data = await response.json();
+
+    if (response.ok && data.status === "ok") {
+      document.getElementById("health-status").textContent = "Status: OK";
+    }
+  } catch (e) {
+    console.error("Health check failed:", e);
+  }
+}
+
   async function loadProducts() {
     try {
       const data = await getProducts();
@@ -38,4 +51,5 @@
   }
 
   loadProducts();
+  checkHealth();
 })();
