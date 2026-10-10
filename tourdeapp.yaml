@@ -1,4 +1,6 @@
-services:
+exposedPort: 80
+
+containers:
   - name: web
     image: registry.tourde.cloud/cookies/web
     port: 3001
