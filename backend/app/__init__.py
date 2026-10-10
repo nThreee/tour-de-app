@@ -17,7 +17,7 @@ def create_app():
     app.register_blueprint(product_bp, url_prefix="/api/product")
     app.register_blueprint(health_bp, url_prefix="/api/v1")
 
-    with app.app_context():
-        db.create_all()
+    #with app.app_context():
+    #    db.create_all()
 
     return app
