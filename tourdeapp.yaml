@@ -10,7 +10,7 @@ containers:
     image: registry.tourde.cloud/cookies/server
     port: 8080
     env:
-      FLASK_DB_HOST: 127.0.0.1
+      FLASK_DB_HOST: mysql
       FLASK_DB_NAME: product
       FLASK_DB_PASSWORD: "strongPassword?"
       FLASK_DB_PORT: "3306"
@@ -21,7 +21,9 @@ containers:
     tag: "8.4"
     env:
       MYSQL_DATABASE: product
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_USER: tda_user
+      MYSQL_PASSWORD: "strongPassword?"
     port: 3306
   - name: caddy
     image: registry.tourde.cloud/cookies/caddy

@@ -15,7 +15,7 @@ Vítame ťa v šablóne pre Python Flask backend! Tento projekt je jednoduché A
 
 **Na Windows:**
 ```bash
-python -m venv .venv
+python -m venv .venv (py -m venv .venv)
 .venv\Scripts\activate
 ```
 
