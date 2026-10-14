@@ -17,7 +17,7 @@
 
   async function checkHealth() {
   try {
-    const response = await fetch("http://localhost:8080/api/v1/health");
+    const response = await fetch("/api/v1/health");
     const data = await response.json();
 
     if (response.ok && data.status === "ok") {
