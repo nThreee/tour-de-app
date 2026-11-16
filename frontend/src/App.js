@@ -1,5 +1,7 @@
 (function () {
   const tableContainer = document.getElementById("product-list");
+  const jmenokontejner = document.getElementById("jmena-list");
+
   let editingId = null;
 
   const { setEditing, resetForm } = initProductForm({
@@ -50,6 +52,20 @@
     }
   }
 
+  async function loadJmena() {
+    try {
+      const data = await getJmena();
+      jmenokontejner.innerHTML = "";
+
+      for (let i = 0; i < data.length; i++) {
+        jmenokontejner.innerHTML += data[i].jmeno;
+      }
+    } catch (e) {
+      console.error("Failed to load jmena:", e);
+    }
+  }
+
   loadProducts();
   checkHealth();
+  loadJmena();
 })();

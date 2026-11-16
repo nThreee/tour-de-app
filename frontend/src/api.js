@@ -5,6 +5,11 @@ async function getProducts() {
   return res.json();
 }
 
+async function getJmena() {
+  const res = await fetch(`${API_URL}/product/jmena`);
+  return res.json();
+}
+
 async function createProduct(product) {
   const res = await fetch(`${API_URL}/product`, {
     method: "POST",
