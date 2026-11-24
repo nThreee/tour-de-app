@@ -3,15 +3,15 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from .extensions import db
 
-class Jmena(db.Model):
-    __tablename__: str = "jmena"
+class Name(db.Model):
+    __tablename__: str = "name"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    jmeno: Mapped[str] = mapped_column(String(100), nullable=False)
-    tym: Mapped[str] = mapped_column(String(100), nullable=False)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    team: Mapped[str] = mapped_column(String(100), nullable=False)
 
     def to_dict(self) -> dict[str, object]:
-        return {"id": self.id, "jmeno": self.jmeno, "tym": self.tym}
+        return {"id": self.id, "name": self.name, "team": self.team}
 
 
 class Product(db.Model):

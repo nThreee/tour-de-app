@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from sqlalchemy import select
 
 from .extensions import db
-from .models import Product, Jmena
+from .models import Product, Name
 
 product_bp = Blueprint("products", __name__)
 health_bp = Blueprint("health", __name__)
@@ -13,9 +13,9 @@ class ProductData(TypedDict):
     name: str
     cost: int
 
-class JmenaData(TypedDict):
-    jmeno: str
-    tym: str
+class NameData(TypedDict):
+    name: str
+    team: str
 
 def extract_product() -> ProductData | None:
     data: dict[str, Any] = request.get_json(silent=True) or {}  # pyright: ignore[reportExplicitAny]
@@ -24,37 +24,36 @@ def extract_product() -> ProductData | None:
 
     return {"name": data["name"], "cost": data["cost"]}
 
-def extract_jmeno() -> JmenaData | None:
+def extract_name() -> NameData | None:
     data: dict[str, str] = request.get_json(silent=True) or {}  # pyright: ignore[reportExplicitAny]
-    if data.get("jmeno") is None or data.get("tym") is None:
+    if data.get("name") is None or data.get("team") is None:
         return None
 
-    return {"jmeno": data["jmeno"], "tym": data["tym"]}    
-
+    return {"name": data["name"], "team": data["team"]}    
 
 @product_bp.get("")
 def list_products():
     products = db.session.scalars(select(Product).order_by(Product.id)).all()
     return jsonify([product.to_dict() for product in products]), 200
 
-@product_bp.get("/jmena")
-def list_jmena():
-    jmena = db.session.scalars(select(Jmena)).all()
-    return jsonify([jmeno.to_dict() for jmeno in jmena]), 200
+@product_bp.get("/names")
+def list_names():
+    names = db.session.scalars(select(Name)).all()
+    return jsonify([name.to_dict() for name in names]), 200
 
-@product_bp.post("/jmena")
-def create_jmena():
-    data = extract_jmeno()
+@product_bp.post("/names")
+def create_names():
+    data = extract_name()
     if data is None:
         return jsonify({"message": "name and team are required"}), 400
 
-    jmeno = Jmena()
-    jmeno.jmeno = data["jmeno"]
-    jmeno.tym = data["tym"]
-    db.session.add(jmeno)
+    name = Name()
+    name.name = data["name"]
+    name.team = data["team"]
+    db.session.add(name)
     db.session.commit()
 
-    return jsonify(jmeno.to_dict()), 200
+    return jsonify(name.to_dict()), 200
 
 @product_bp.post("")
 def create_product():

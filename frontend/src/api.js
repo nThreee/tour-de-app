@@ -5,8 +5,8 @@ async function getProducts() {
   return res.json();
 }
 
-async function getJmena() {
-  const res = await fetch(`${API_URL}/product/jmena`);
+async function getNames() {
+  const res = await fetch(`${API_URL}/product/name`);
   return res.json();
 }
 

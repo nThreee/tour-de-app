@@ -1,6 +1,6 @@
 (function () {
   const tableContainer = document.getElementById("product-list");
-  const jmenokontejner = document.getElementById("jmena-list");
+  const nameContainer = document.getElementById("name-list");
 
   let editingId = null;
 
@@ -52,20 +52,20 @@
     }
   }
 
-  async function loadJmena() {
+  async function loadNames() {
     try {
-      const data = await getJmena();
-      jmenokontejner.innerHTML = "";
+      const data = await getNames();
+      nameContainer.innerHTML = "";
 
       for (let i = 0; i < data.length; i++) {
-        jmenokontejner.innerHTML += data[i].jmeno;
+        nameContainer.innerHTML += data[i].jmeno;
       }
     } catch (e) {
-      console.error("Failed to load jmena:", e);
+      console.error("Failed to load names:", e);
     }
   }
 
   loadProducts();
   checkHealth();
-  loadJmena();
+  loadNames();
 })();
