@@ -1,6 +1,6 @@
 (function () {
   const tableContainer = document.getElementById("product-list");
-  const nameContainer = document.getElementById("name-list");
+  const teamContainer = document.getElementById("team-info");
 
   let editingId = null;
 
@@ -51,21 +51,24 @@
       console.error("Failed to load products:", e);
     }
   }
-
-  async function loadNames() {
+  async function loadTeam() {
+   
     try {
-      const data = await getNames();
-      nameContainer.innerHTML = "";
+        const data = await getTeam();
+        teamContainer.textContent = data.name;
 
-      for (let i = 0; i < data.length; i++) {
-        nameContainer.innerHTML += data[i].jmeno;
+        for (const member of data.members) {
+            const p = document.createElement("p");
+            p.textContent = member;
+            teamContainer.appendChild(p);
+        }
       }
-    } catch (e) {
-      console.error("Failed to load names:", e);
+    catch (e) {
+        console.error("Failed to load team:", e);
+      }
     }
-  }
 
   loadProducts();
   checkHealth();
-  loadNames();
+  loadTeam();
 })();

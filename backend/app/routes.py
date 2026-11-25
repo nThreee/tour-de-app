@@ -4,18 +4,16 @@ from flask import Blueprint, jsonify, request
 from sqlalchemy import select
 
 from .extensions import db
-from .models import Product, Name
+from .models import Product, Team, Member
 
 product_bp = Blueprint("products", __name__)
 health_bp = Blueprint("health", __name__)
+team_bp = Blueprint("team", __name__)
 
 class ProductData(TypedDict):
     name: str
     cost: int
 
-class NameData(TypedDict):
-    name: str
-    team: str
 
 def extract_product() -> ProductData | None:
     data: dict[str, Any] = request.get_json(silent=True) or {}  # pyright: ignore[reportExplicitAny]
@@ -24,36 +22,11 @@ def extract_product() -> ProductData | None:
 
     return {"name": data["name"], "cost": data["cost"]}
 
-def extract_name() -> NameData | None:
-    data: dict[str, str] = request.get_json(silent=True) or {}  # pyright: ignore[reportExplicitAny]
-    if data.get("name") is None or data.get("team") is None:
-        return None
-
-    return {"name": data["name"], "team": data["team"]}    
-
 @product_bp.get("")
 def list_products():
     products = db.session.scalars(select(Product).order_by(Product.id)).all()
     return jsonify([product.to_dict() for product in products]), 200
 
-@product_bp.get("/names")
-def list_names():
-    names = db.session.scalars(select(Name)).all()
-    return jsonify([name.to_dict() for name in names]), 200
-
-@product_bp.post("/names")
-def create_names():
-    data = extract_name()
-    if data is None:
-        return jsonify({"message": "name and team are required"}), 400
-
-    name = Name()
-    name.name = data["name"]
-    name.team = data["team"]
-    db.session.add(name)
-    db.session.commit()
-
-    return jsonify(name.to_dict()), 200
 
 @product_bp.post("")
 def create_product():
@@ -99,3 +72,17 @@ def delete_product(product_id: int):
 @health_bp.get("/health")
 def health():
     return jsonify({"status": "ok"}), 200
+
+@team_bp.get("")
+def get_team_and_members():
+    team = db.session.scalar(select(Team).order_by(Team.id))
+
+    if team is None:
+        return jsonify({"message": "team not found"}), 404
+
+    members = db.session.scalars(select(Member).where(Member.team_id==team.id).order_by(Member.id)).all()
+    return jsonify({
+                       "name": team.name,
+                       "members": [member.name for member in members]
+                   }), 200
+

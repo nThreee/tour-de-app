@@ -5,11 +5,6 @@ async function getProducts() {
   return res.json();
 }
 
-async function getNames() {
-  const res = await fetch(`${API_URL}/product/name`);
-  return res.json();
-}
-
 async function createProduct(product) {
   const res = await fetch(`${API_URL}/product`, {
     method: "POST",
@@ -36,5 +31,10 @@ async function deleteProduct(id) {
   const res = await fetch(`${API_URL}/product/${id}`, {
     method: "DELETE",
   });
+  return res.json();
+}
+
+async function getTeam() {
+  const res = await fetch(`${API_URL}/team`);
   return res.json();
 }
