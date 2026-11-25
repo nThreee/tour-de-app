@@ -4,10 +4,11 @@ from flask import Blueprint, jsonify, request
 from sqlalchemy import select
 
 from .extensions import db
-from .models import Product
+from .models import Product, Team, Member
 
 product_bp = Blueprint("products", __name__)
 health_bp = Blueprint("health", __name__)
+team_bp = Blueprint("team", __name__)
 
 class ProductData(TypedDict):
     name: str
@@ -72,3 +73,17 @@ def delete_product(product_id: int):
 @health_bp.get("/health")
 def health():
     return jsonify({"status": "ok"}), 200
+
+@team_bp.get("")
+def get_team_and_members():
+    team = db.session.scalar(select(Team).order_by(Team.id))
+
+    if team is None:
+        return jsonify({"message": "team not found"}), 404
+
+    members = db.session.scalars(select(Member).where(Member.team_id==team.id).order_by(Member.id)).all()
+    return jsonify({
+                       "name": team.name,
+                       "members": [member.name for member in members]
+                   }), 200
+

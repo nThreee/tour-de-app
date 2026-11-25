@@ -1,5 +1,7 @@
 (function () {
   const tableContainer = document.getElementById("product-list");
+  const teamContainer = document.getElementById("team-info");
+
   let editingId = null;
 
   const { setEditing, resetForm } = initProductForm({
@@ -49,7 +51,24 @@
       console.error("Failed to load products:", e);
     }
   }
+  async function loadTeam() {
+   
+    try {
+        const data = await getTeam();
+        teamContainer.textContent = data.name;
+
+        for (const member of data.members) {
+            const p = document.createElement("p");
+            p.textContent = member;
+            teamContainer.appendChild(p);
+        }
+      }
+    catch (e) {
+        console.error("Failed to load team:", e);
+      }
+    }
 
   loadProducts();
   checkHealth();
+  loadTeam();
 })();

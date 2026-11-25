@@ -1,4 +1,4 @@
-from sqlalchemy import String
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .extensions import db
@@ -13,3 +13,16 @@ class Product(db.Model):
 
     def to_dict(self) -> dict[str, object]:
         return {"id": self.id, "name": self.name, "cost": self.cost}
+
+class Team(db.Model):
+    __tablename__: str = "team"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+
+class Member(db.Model):
+    __tablename__: str = "member"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    team_id: Mapped[int] = mapped_column(ForeignKey("team.id"))

@@ -33,3 +33,8 @@ async function deleteProduct(id) {
   });
   return res.json();
 }
+
+async function getTeam() {
+  const res = await fetch(`${API_URL}/team`);
+  return res.json();
+}
